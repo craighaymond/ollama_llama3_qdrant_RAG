@@ -67,7 +67,7 @@ logger.info("initializing the OllamaEmbedding")
 embed_model = OllamaEmbedding(model_name='mxbai-embed-large', base_url='http://localhost:11434')
 logger.info("initializing the global settings")
 Settings.embed_model = embed_model
-Settings.llm = Ollama(model="llama3", base_url='http://localhost:11434')
+Settings.llm = Ollama(model="llama3", request_timeout=300.0, base_url='http://localhost:11434')
 Settings.transformations = [text_parser]
 
 # Creating the nodes, vector store, HyDE transformer and finally querying
@@ -112,9 +112,13 @@ logger.info("creating the HyDEQueryTransform instance")
 hyde = HyDEQueryTransform(include_original=True)
 hyde_query_engine = TransformQueryEngine(vector_query_engine, hyde)
 
-logger.info("retrieving the response to the query")
-response = hyde_query_engine.query(
-    str_or_query_bundle="what are all the data sets used in the experiment and told in the paper")
+logger.info("About to retrieve the response to the query")
+try:
+    response = hyde_query_engine.query(
+        str_or_query_bundle="summarize what Israel did.")
+    logger.info("Successfully retrieved the response to the query")
+except Exception as e:
+    logger.error(f"Failed to retrieve the response to the query. Error: {e}")
 print(response)
 
 client.close()
