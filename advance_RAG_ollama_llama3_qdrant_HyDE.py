@@ -113,12 +113,10 @@ hyde = HyDEQueryTransform(include_original=True)
 hyde_query_engine = TransformQueryEngine(vector_query_engine, hyde)
 
 logger.info("About to retrieve the response to the query")
-try:
-    response = hyde_query_engine.query(
-        str_or_query_bundle="summarize what Israel did.")
-    logger.info("Successfully retrieved the response to the query")
-except Exception as e:
-    logger.error(f"Failed to retrieve the response to the query. Error: {e}")
+response = hyde_query_engine.query(str_or_query_bundle="what are some of Arizona's driving laws pertaining to speeding?  Cite your sources.")
 print(response)
+response = hyde_query_engine.query(str_or_query_bundle="what's the University of Arizona's financial situation and outlook?  Cite your sources.")
+print(response)
+logger.info("Successfully retrieved the response to the query")
 
 client.close()
